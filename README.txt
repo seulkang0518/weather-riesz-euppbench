@@ -89,6 +89,30 @@ an existing checkpoint. Choose another output directory for changed preparation.
 An interrupted preparation directory is deliberately incomplete and refused by
 training; preserve it for diagnosis or use a new output directory.
 
+Some released station targets have no historical observations. Preparation keeps
+all 122 station tokens, but each station/lead/variable needs at least two finite
+TRAINING observations to enter a training loss or a validation/test score.
+Unsupported coordinates stay masked in every split, even if a held-out label
+exists. No observations are imputed. Their mean=0/std=1 normalization entries are
+neutral finite placeholders only; their generated values are not calibrated or
+evaluated forecasts. metadata.json lists every unsupported coordinate and the
+supported output count for each lead. These counts must accompany benchmark
+results; 122 station tokens does not imply 122 observed training targets. A read
+of all published temperature observations at 48 h confirms 120 supported targets;
+German stations 3362 and 5347 have no temperature labels in train, validation, or
+test. See validation/missing_target_support_check.json for the bounded audit.
+
+If an older checkout stopped with "At least two training observations required":
+update the code and reuse the downloaded archive/stores. Preserve the incomplete
+directory and prepare into a NEW location, for example:
+
+    git pull --ff-only
+    python -u prepare_data.py --raw data/raw --profile temperature48 \
+      --output data/temperature48_v2
+
+Then set WEATHER_DATA=data/temperature48_v2 when launching scripts/scafell.sh,
+or pass --data data/temperature48_v2 to run_comparison.py. No redownload is needed.
+
 Validation years are 2003,2010,2016. Operational test initialization dates are
 2017-04-01 through 2018-12-31. These are not the years from our old 10-station task.
 No observation-missingness label is supplied as a model input. Masks only exclude
@@ -187,8 +211,8 @@ Only after reviewing real pilot data and learning curves:
 The existing ZIP is reverified/reused; additional stores are extracted. This is
 much more expensive (all positive leads, both variables, wider network, 50 training
 particles). Full-source special cases and target coverage still require a real
-full-data audit. An entire station-variable with no training observations is an
-explicit error; the code does not silently impute a target distribution.
+full-data audit. Unsupported station/lead/variable coordinates are explicitly
+masked and recorded; a lead/variable with no supported stations is an error.
 
 LIMITS OF THE CURRENT VALIDATION
 --------------------------------

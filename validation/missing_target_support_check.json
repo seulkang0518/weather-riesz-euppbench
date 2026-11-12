@@ -1,0 +1,38 @@
+{
+  "scope": "Complete temperature observations across the 122 stations and all dates, lead 48h only; no ensemble predictor validation or full preparation",
+  "data_record": "https://zenodo.org/records/7708362",
+  "stations": 122,
+  "lead_hours": 48,
+  "train_cases": 3553,
+  "val_cases": 627,
+  "test_cases": 640,
+  "supported_target_coordinates": 120,
+  "unsupported_coordinates": [
+    {
+      "station_id": 3362,
+      "country": "germany",
+      "lead_hours": 48,
+      "variable": "t2m",
+      "training_count": 0,
+      "validation_count": 0,
+      "test_count": 0
+    },
+    {
+      "station_id": 5347,
+      "country": "germany",
+      "lead_hours": 48,
+      "variable": "t2m",
+      "training_count": 0,
+      "validation_count": 0,
+      "test_count": 0
+    }
+  ],
+  "original_error_reproduced": "At least two training observations required per station/lead/variable",
+  "corrected_observation_normalization_finite": true,
+  "neutral_placeholders_only_at_masked_coordinates": true,
+  "new_downloaded_bytes": 76882933,
+  "download_scope": "Range-selected public observation entries; full archive not downloaded",
+  "local_regression_tests": "14 passed",
+  "synthetic_raw_integration": "10 retained station tokens; 8 supported targets; held-out-only labels remain masked",
+  "synthetic_training_smoke": "All four objectives completed two CPU updates and masked validation scoring"
+}

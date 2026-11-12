@@ -91,12 +91,39 @@ def split_masks(dates, *, operational=False):
     return {'train': ~validation, 'val': validation}
 
 
-def seasonal_stats(values, dates, lead_indices, train, n_leads, *, second=None, window=21):
+def training_observation_counts(values, lead_indices, train, n_leads):
+    """Finite target counts [lead, station, variable], from training cases only."""
+    x = np.asarray(values)
+    selected = np.asarray(train, dtype=bool)
+    lead_indices = np.asarray(lead_indices, dtype=int)
+    if x.ndim != 3 or selected.shape != (len(x),) or lead_indices.shape != (len(x),):
+        raise ValueError('Expected values [case,station,variable] and matching case selectors')
+    if not n_leads > 0 or np.any((lead_indices < 0) | (lead_indices >= n_leads)):
+        raise ValueError('Invalid lead indices')
+    counts = np.zeros((n_leads,) + x.shape[1:], dtype=np.int64)
+    np.add.at(counts, lead_indices[selected], np.isfinite(x[selected]))
+    return counts
+
+
+def mask_unsupported_targets(values, lead_indices, supported):
+    """Keep unsupported labels missing in EVERY split; do not impute observations."""
+    x = np.asarray(values)
+    allowed = np.asarray(supported, dtype=bool)[np.asarray(lead_indices, dtype=int)]
+    if x.shape != allowed.shape:
+        raise ValueError('Target/support dimensions differ')
+    return np.where(allowed, x, np.nan)
+
+
+def seasonal_stats(values, dates, lead_indices, train, n_leads, *, second=None, window=21,
+                   allow_unobserved=False):
     """Pooled 21-day, circular 366-day climatology; no validation/test fitting.
 
     second is E_member[x^2] for ensemble inputs, otherwise observations squared.
     Sparse seasonal windows fall back to the station/lead's training-wide stats.
-    A coordinate with no training variance/observations is an explicit error.
+    By default, coordinates with fewer than two observations raise. For already
+    masked, unsupported TARGET coordinates, allow_unobserved gives neutral
+    mean=0/std=1 placeholders. These are not estimated climatologies or labels;
+    the caller must keep these coordinates excluded from every loss and score.
     """
     x = np.asarray(values, dtype=np.float64)
     x2 = x*x if second is None else np.asarray(second, dtype=np.float64)
@@ -108,9 +135,12 @@ def seasonal_stats(values, dates, lead_indices, train, n_leads, *, second=None, 
     np.add.at(total, idx, np.where(valid[train], x[train], 0.))
     np.add.at(square, idx, np.where(valid[train], x2[train], 0.))
     global_count = count.sum(0)
-    if (global_count < 2).any(): raise ValueError('At least two training observations required per station/lead/variable')
-    global_mean = total.sum(0)/global_count
-    global_var = square.sum(0)/global_count-global_mean**2
+    unsupported = global_count < 2
+    if unsupported.any() and not allow_unobserved:
+        raise ValueError('At least two training observations required per station/lead/variable')
+    safe_count = np.maximum(global_count, 1.)
+    global_mean = total.sum(0)/safe_count
+    global_var = square.sum(0)/safe_count-global_mean**2
     rolled = [sum(np.roll(a, shift, axis=0) for shift in range(-window//2+1, window//2+1))
               for a in (count, total, square)]
     n, sm, sq = rolled
@@ -119,6 +149,8 @@ def seasonal_stats(values, dates, lead_indices, train, n_leads, *, second=None, 
     sparse = n < 2
     mean = np.where(sparse, global_mean[None], mean)
     var = np.where(sparse, global_var[None], var)
+    mean = np.where(unsupported[None], 0., mean)
+    var = np.where(unsupported[None], 1., var)
     if not np.isfinite(mean).all(): raise ValueError('Nonfinite climatology')
     std = np.maximum(var, 1e-8)**.5
     return mean.astype('float32'), std.astype('float32'), int(sparse.sum())

@@ -19,6 +19,13 @@ for country_index,country in enumerate(COUNTRIES):
             if not operational: coords['year']=years
             shape=tuple(len(coords[d]) for d in dims)
             y=280+rng.normal(size=shape).astype('float32')
+            if observations and country_index==0:
+                y[0]=np.nan  # One station has no observations at all.
+            if observations and country_index==1 and not operational:
+                # A second station has held-out labels but no training support.
+                # Neither those validation labels nor the operational labels
+                # may determine its eligibility or climatology.
+                y[0,:,~np.isin(years+1996,(2003,2010,2016))]=np.nan
             variables={'t2m':(dims,y)}
             if not observations:
                 for name in ['u10','v10','tcc','tcwv']: variables[name]=(dims,rng.normal(size=shape).astype('float32'))
@@ -35,12 +42,23 @@ with (root/'prepare.log').open('w') as log:
 meta=json.loads((output/'metadata.json').read_text())
 assert meta['complete'] and meta['stations']==10 and meta['counts']=={'train':204,'val':36,'test':3}
 assert meta['development_only'] and len(meta['files_sha256'])>15
+assert meta['target_support']['supported_coordinates_per_lead']==[8]
+assert {r['station_id'] for r in meta['target_support']['unsupported_coordinates']}=={10000,10002}
 for split in ['train','val','test']:
     condition=np.load(output/split/'condition.npy')
     assert np.isfinite(condition).all()
     assert condition.shape[2]==meta['features']
+    masks=np.load(output/split/'mask.npy')
+    assert not masks[:,[0,2]].any()
+    assert masks[:,1].any()
+normalization=np.load(output/'normalization.npz')
+assert not normalization['obs_training_supported'][:,[0,2]].any()
+np.testing.assert_array_equal(normalization['obs_mean'][:,:,[0,2]],0.)
+np.testing.assert_array_equal(normalization['obs_std'][:,:,[0,2]],1.)
 print('Preparation integration passed:',root)
 (repo/'validation/raw_preparation_check.json').write_text(json.dumps({'development_only':True,
     'data':'synthetic raw Zarr stores shaped like the public archive; not real EUPPBench forecasts',
     'countries':5,'stations':10,'reforecast_years':[1997,2016],'counts':meta['counts'],
-    'immutable_prepared_files':len(meta['files_sha256']),'normalization_training_only':True},indent=2))
+    'immutable_prepared_files':len(meta['files_sha256']),'normalization_training_only':True,
+    'supported_target_coordinates':8,'unsupported_station_tokens_retained':2,
+    'held_out_labels_cannot_restore_unsupported_training_coordinates':True},indent=2))

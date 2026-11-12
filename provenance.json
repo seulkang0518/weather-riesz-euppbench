@@ -31,7 +31,8 @@
     "record": "https://zenodo.org/records/7708362",
     "archive_bytes": 18324361137,
     "archive_md5": "e409457279b3494d18f2dfb41f3f449b",
-    "full_archive_downloaded_locally": false
+    "full_archive_downloaded_locally": false,
+    "temperature48_observation_coverage_audit": "validation/missing_target_support_check.json"
   },
   "implementation_files_sha256": {
     "configs/full_joint.yaml": "eb0cd9fcc8ac9d660ddf1b62fb0aed32087bd3219f3ae9f4b9db69a9329ccfc5",
@@ -44,20 +45,20 @@
     "eupp_weather/metrics.py": "1c1f55565ce57de6f414e29ae50f3babdc3444aaea703e43152dd60a1881eec2",
     "eupp_weather/model.py": "e6c98b9b3369d99b48f3ff13dca69c3b9dc821c1ff56afd59b7b009250ca1740",
     "eupp_weather/objectives.py": "e79dc2d71b670509bd5cbfe33d40c45fc75415cd043242510e54f5c0fa60b21d",
-    "eupp_weather/preprocessing.py": "671061a32e784c7af7ba65a6b929290fdf1cd06d8e354f1eeae3dbb9a5f944b4",
+    "eupp_weather/preprocessing.py": "f753c46c81994c0a20c83b0d195de595847c2df4a465fde14bdabbfa8b5ef4a7",
     "eupp_weather/riesz_topk_softmax.py": "a64f0a97e8ae4998cec7e72b8fff7bae27563467c1a4f75acb6d2307455dd578",
     "eupp_weather/uniform_riesz.py": "6651aa6e59dd72d9e954804c95c55a71371fc1d2834b5e2b6be54269c95b3666",
     "evaluate.py": "66371bbebc8c59f23212bd165f1a184f824b14c1164a8cbb4680c9560641ff52",
     "make_synthetic.py": "b57de2cf97a5fe7a6ed3577ae47e22e69a6566e7e4d5dad56b4656271f26bffc",
-    "prepare_data.py": "c96ed5aa6bd2f52c92e444919cd8b4e39751523f5979d83dde7b19d7db9a49f6",
+    "prepare_data.py": "8554373d10b3eab422c5cc21589d60f771cfeeeb3c5f4048caf954e4a2d56d4a",
     "run_comparison.py": "448b2f7eb840e8b5298c5d7eace1985a7ccab8235f4fba4d2590e2d204830c7d",
-    "scripts/check_raw_preparation.py": "99bc02c2fde904c515d4ea77f3eba91e724cbe95ce1c13be7dce6f0e67098bec",
+    "scripts/check_raw_preparation.py": "17fbb20a6194f18535edc44ea7b002c39915343e073a63cf234b2bb486e66ed3",
     "scripts/scafell.sh": "03e44eb85bef7a952a9160dc7435d299eda42c90d863460589221d3ebf3d6c6c",
     "scripts/smoke_cpu.sh": "8a393ec176c8a9d16b95195a32b126e85c821323cf7d484ae110fa3c169348bb",
     "scripts/ucl_sge.sh": "583800dece225f839547006ffc6a34d9ed13881c6b83f38e2048000a1035c7f1",
     "tests/test_model_metrics.py": "58cb26413818d8fd964f1b6505bd1135bcb75103607933be7123516581e3df2a",
     "tests/test_objectives.py": "aefe74709e50ab86e35b30b6b0edd7591f90048fee76813ca16210eaa6947f87",
-    "tests/test_preprocessing.py": "89b0b86caee4a2aaef1ec5f7b39c379e69b451e0b7f3c888454720b091f711f1",
+    "tests/test_preprocessing.py": "3a6fb2c6164847584d4e9e069e872f70629f15c4f0ecdbf0fd3e0659e5933fb4",
     "train.py": "7fc5d6c26069673f780361f67cc1fbf2e32782d56c73d2e9fd9e0ad70ef77520"
   }
 }

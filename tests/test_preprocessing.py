@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 from eupp_weather.preprocessing import seasonal_stats,split_masks,normalized_store,case_dataset,error_scales,inverse_targets
+from eupp_weather.preprocessing import training_observation_counts,mask_unsupported_targets
 
 
 def test_climatology_ignores_poisoned_validation_values_and_error_scale_uses_training_only():
@@ -49,3 +50,36 @@ def test_large_offset_predictor_preserves_small_ensemble_variance():
     np.testing.assert_allclose(first,100000.)
     np.testing.assert_allclose(second-first**2,1.)
     np.testing.assert_allclose(fraction,1.)
+
+
+def test_missing_training_targets_are_masked_without_using_held_out_values():
+    # Two leads: station 20 lacks enough training data only at lead index 1.
+    leads=np.array([0,0,1,1,0,1]); train=np.array([1,1,1,1,0,0],dtype=bool)
+    y=np.ones((6,2,1)); y[2,1,0]=np.nan
+    counts=training_observation_counts(y,leads,train,2)
+    np.testing.assert_array_equal(counts[...,0],[[2,2],[2,1]])
+    supported=counts>=2
+    actual=mask_unsupported_targets(y,leads,supported)
+    assert np.isnan(actual[[2,3,5],1,0]).all()
+    assert np.isfinite(actual[[0,1,4],1,0]).all()
+    changed=y.copy(); changed[~train]=1e9
+    np.testing.assert_array_equal(counts,training_observation_counts(changed,leads,train,2))
+
+
+def test_neutral_missing_climatology_is_opt_in_and_preserves_supported_statistics():
+    dates=np.array(['1999-01-01','2000-01-01','2003-01-01'],dtype='datetime64[D]')
+    train=split_masks(dates)['train']; leads=np.zeros(3,dtype=int)
+    y=np.array([[[2.],[np.nan]],[[4.],[np.nan]],[[1e9],[99.]]])
+    with pytest.raises(ValueError,match='At least two'):
+        seasonal_stats(y,dates,leads,train,1)
+    counts=training_observation_counts(y,leads,train,1)
+    masked=mask_unsupported_targets(y,leads,counts>=2)
+    mean,std,_=seasonal_stats(masked,dates,leads,train,1,allow_unobserved=True)
+    assert np.isfinite(mean).all() and np.isfinite(std).all()
+    np.testing.assert_array_equal(mean[:,:,1],0.)
+    np.testing.assert_array_equal(std[:,:,1],1.)
+    supported_mean,supported_std,_=seasonal_stats(y[:,:1],dates,leads,train,1)
+    np.testing.assert_array_equal(mean[:,:,:1],supported_mean)
+    np.testing.assert_array_equal(std[:,:,:1],supported_std)
+    # Held-out labels are not invented or admitted for the unsupported station.
+    assert np.isnan(masked[:,1]).all()

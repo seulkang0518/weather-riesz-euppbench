@@ -55,6 +55,19 @@ IMPORTANT DISCREPANCIES / IMPLEMENTATION DETAILS
    730 initializations in 2017-2018; the April-2017 cutoff leaves 640. At all 20
    leads, expected counts before excluding fully missing cases are 71,060 / 12,540 /
    12,800. Pinned dataset YAML still lists 14,600 test examples before that cutoff.
+10. The released observation arrays include coordinates with no historical
+    labels (confirmed for German temperature station IDs 3362 and 5347).
+    These two stations have no temperature labels in train, validation, or test
+    at 48 h; the observation audit covers all 122 stations and finds 120 supported
+    targets. See validation/missing_target_support_check.json. Our
+    original all-coordinates-required climatology check rejected these. The
+    corrected preparation keeps all station tokens but masks coordinates with
+    fewer than two finite TRAINING observations in every split. Held-out labels
+    never change that eligibility. Neutral normalization entries at these masked
+    coordinates are placeholders, not imputed weather or estimated climatology.
+    Results must report metadata.json's supported output counts as well as the
+    122-token architecture. This is an explicit adaptation, not a claim to
+    reproduce the authors' precise treatment of every missing station.
 
 OUR EXPERIMENT IS A CONTROLLED ADAPTATION
 ---------------------------------------

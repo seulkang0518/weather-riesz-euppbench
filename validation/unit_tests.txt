@@ -1,19 +1,7 @@
-............                                                             [100%]
-=============================== warnings summary ===============================
-../../../../.pyenv/versions/3.11.9/lib/python3.11/site-packages/anyio/pytest_plugin.py:14
-  /Users/sophiakang/.pyenv/versions/3.11.9/lib/python3.11/site-packages/anyio/pytest_plugin.py:14: PytestRemovedIn10Warning: _pytest.python.CallSpec2 has been renamed to CallSpec.
-  The CallSpec2 alias will be removed in pytest 10.
-  Update imports to use CallSpec instead.
-  See https://docs.pytest.org/en/stable/deprecations.html#callspec2-renamed
-    from _pytest.python import CallSpec2
-
-tests/test_preprocessing.py::test_actual_reforecast_year_encoding_and_exact_lead_selection
-  /Users/sophiakang/Documents/Playground/output/weather-riesz-euppbench/tests/test_preprocessing.py:24: UserWarning: Converting non-nanosecond precision timedelta values to nanosecond precision. This behavior can eventually be relaxed in xarray, as it is an artifact from pandas which is now beginning to support non-nanosecond precision values. This warning is caused by passing non-nanosecond np.datetime64 or np.timedelta64 values to the DataArray or Variable constructor; it can be silenced by converting the values to nanosecond precision ahead of time.
-    ds=xr.Dataset({'t2m':(('station_id','time','number','year','step','surface'),
-
-tests/test_preprocessing.py::test_actual_reforecast_year_encoding_and_exact_lead_selection
-  /Users/sophiakang/Documents/Playground/output/weather-riesz-euppbench/tests/test_preprocessing.py:26: FutureWarning: zarr_version is deprecated, use zarr_format
-    path=tmp_path/'sample.zarr'; ds.to_zarr(path,consolidated=True,zarr_version=2)
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-12 passed, 3 warnings in 1.69s
+Command: python -m pytest -q
+Result: 14 passed, 3 warnings in 1.81s
+Date: 2026-11-12
+Warnings: external anyio pytest deprecation and xarray timedelta/Zarr API deprecations.
+Missing-target regression: training-only eligibility, held-out masking, neutral unsupported normalization, preservation of supported climatology.
+Additional checks: synthetic raw Zarr preparation with two unsupported station tokens, and all four two-update CPU training/evaluation checks on that prepared data.
+See missing_target_support_check.json and raw_preparation_check.json.

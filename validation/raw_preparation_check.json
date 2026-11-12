@@ -13,5 +13,8 @@
     "test": 3
   },
   "immutable_prepared_files": 26,
-  "normalization_training_only": true
+  "normalization_training_only": true,
+  "supported_target_coordinates": 8,
+  "unsupported_station_tokens_retained": 2,
+  "held_out_labels_cannot_restore_unsupported_training_coordinates": true
 }

@@ -5,7 +5,8 @@ import numpy as np
 from numpy.lib.format import open_memmap
 from eupp_weather.common import digest, save_json, disjoint_output
 from eupp_weather.preprocessing import (COUNTRIES, VALIDATION_YEARS, open_stations, case_dataset,
-    day_of_year, split_masks, seasonal_stats, error_scales)
+    day_of_year, split_masks, seasonal_stats, error_scales,
+    training_observation_counts, mask_unsupported_targets)
 
 
 def moments(ds, name):
@@ -86,11 +87,31 @@ def main():
     lead_idx = np.array([leads.index(int(h)) for h in hours])
     split = split_masks(dates)
     target = observation(obs, variables)
-    omean, ostd, sparse = seasonal_stats(target, dates, lead_idx, split['train'], len(leads))
-    np.savez_compressed(root/'normalization.npz', obs_mean=omean, obs_std=ostd)
-    means, stds = lookup(omean, dates, lead_idx), lookup(ostd, dates, lead_idx)
-    target_norm = (target-means)/stds
-    raw_mean, raw_second = {}, {}
+    # Some released station targets are entirely absent. Keep the original
+    # station tokens, but decide output eligibility using TRAINING labels only.
+    # Unsupported coordinates remain masked even if held-out observations exist.
+    counts = training_observation_counts(target, lead_idx, split['train'], len(leads))
+    supported = counts >= 2
+    if not supported.any(axis=1).all():
+        raise ValueError('No supported target stations for at least one requested lead/variable')
+    unsupported = [{'station_id': int(ref.station_id.values[s]),
+                    'country': str(ref.country.values[s]), 'lead_hours': leads[l],
+                    'variable': variables[v], 'training_observations': int(counts[l,s,v])}
+                   for l,s,v in np.argwhere(~supported)]
+    metadata['target_support'] = {
+        'policy': 'At least two finite training observations per station/lead/variable; otherwise mask in every split',
+        'minimum_training_observations': 2,
+        'supported_coordinates_per_lead': supported.sum((1,2)).tolist(),
+        'unsupported_coordinates': unsupported,
+        'unsupported_normalization': 'Neutral mean=0/std=1 placeholders, not imputed observations'}
+    save_json(root/'metadata.json', metadata)
+    print(f'Target support: {int(supported.sum())}/{supported.size} station/lead/variable coordinates; '
+          f'{stations} station tokens retained.', flush=True)
+    for entry in unsupported:
+        print(f'Masked unsupported target: {entry}', flush=True)
+    target = mask_unsupported_targets(target, lead_idx, supported)
+    omean, ostd, sparse = seasonal_stats(target, dates, lead_idx, split['train'], len(leads),
+                                       allow_unobserved=True)
     feature_names = (['t2m', 'u10', 'v10', 'tcc', 'tcwv'] if a.profile == 'temperature48' else
                      sorted(n for n in ref.data_vars if 'number' in ref[n].dims and n not in ('r_850_hPa', 'ssrd6')))
     for variable in variables:
@@ -109,7 +130,7 @@ def main():
     for label, (fc, observations) in records.items():
         d = fc.time.values; h = fc.step.values.astype('timedelta64[h]').astype(int)
         li = np.array([leads.index(int(x)) for x in h])
-        y = target if label == 'reforecast' else observation(observations, variables)
+        y = target if label == 'reforecast' else mask_unsupported_targets(observation(observations, variables), li, supported)
         ym, ys = lookup(omean, d, li), lookup(ostd, d, li)
         masks = split_masks(d, operational=label == 'forecast')
         for name, selected in masks.items():
@@ -130,7 +151,8 @@ def main():
             np.savez_compressed(out/'index.npz', initialization=d[indices], lead_hours=h[indices],
                                 valid_time=d[indices]+fc.step.values[indices], source_index=indices)
             allocations[name] = (arrays, indices, label)
-    normalization = {'obs_mean': omean, 'obs_std': ostd}
+    normalization = {'obs_mean': omean, 'obs_std': ostd,
+                     'obs_training_count': counts, 'obs_training_supported': supported}
     stats_metadata = {'seasonal_windows_falling_back_to_training_global': sparse}
     for number, name in enumerate(feature_names):
         print(f'Predictor {number+1}/{len(feature_names)}: {name}', flush=True)
