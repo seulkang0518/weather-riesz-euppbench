@@ -1,0 +1,38 @@
+{
+  "full_data_training_run": false,
+  "cuda_tested": false,
+  "synthetic_runs": [
+    {
+      "run": "runs/synthetic_smoke_final",
+      "methods": [
+        "energy",
+        "riesz_softmax",
+        "riesz_uniform",
+        "flow_matching"
+      ],
+      "complete": true,
+      "members": 5,
+      "synthetic_only": true
+    },
+    {
+      "run": "runs/distributed_smoke_fixed",
+      "methods": [
+        "energy",
+        "flow_matching"
+      ],
+      "complete": true,
+      "members": 5,
+      "synthetic_only": true
+    }
+  ],
+  "distributed_backend": "Gloo, two CPU processes; CUDA/NCCL not run locally",
+  "python": "3.11.9",
+  "packages": {
+    "torch": "2.12.0",
+    "numpy": "2.4.6",
+    "xarray": "2024.11.0",
+    "zarr": "2.18.7",
+    "pandas": "2.3.3"
+  },
+  "note": "Numerical wiring checks only. No benchmark skill or GPU speed claim."
+}

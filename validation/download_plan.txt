@@ -1,0 +1,2 @@
+{'url': 'https://zenodo.org/api/records/7708362/files/EUPPBench-stations.zip/content', 'archive_bytes': 18324361137, 'md5': 'e409457279b3494d18f2dfb41f3f449b', 'profile': 'temperature48', 'note': 'Keep roughly 40 GB free for ZIP + extraction; prepared arrays require additional space.'}
+Plan only. Add --download on the machine that will hold the data.

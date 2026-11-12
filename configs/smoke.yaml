@@ -1,0 +1,28 @@
+epochs: 2
+microbatch_cases: 2
+global_batch_cases: 4
+train_particles: 4
+validation_members: 5
+evaluation_members: 5
+sampling_steps: 3
+member_chunk: 5
+learning_rate: 0.0005
+flow_learning_rate: 0.0005
+weight_decay: 0.0
+max_grad_norm: 1.0
+energy_estimator: unbiased
+temperatures: [3.2, 0.8, 0.32]
+sigma_min: 0.00001
+validation_seed: 20261112
+evaluation_seed: 20261113
+workers: 0
+cpu_threads: 2
+bf16: false
+log_every: 1
+model:
+  width: 32
+  depth: 2
+  heads: 4
+  dropout: 0.0
+  activation_checkpointing: false
+

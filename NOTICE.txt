@@ -1,0 +1,19 @@
+This is an independent experimental adaptation of:
+Landry, Monteleoni, Charantonis (2025), Generating ensembles of spatially-coherent
+in-situ forecasts using flow matching, arXiv:2504.03463.
+https://arxiv.org/abs/2504.03463
+Reference code inspected: https://github.com/davidlandry93/sidown
+Revision 5396f9f5ecb673394b532c80a3e4922d842d1c78.
+No sidown source files are redistributed in this project.
+
+eupp_weather/riesz_topk_softmax.py and eupp_weather/uniform_riesz.py are unchanged
+copies of the user's existing weather-riesz implementation, with their original
+source provenance and hashes in provenance.json. No new license is asserted for
+those files or for upstream code.
+
+EUPPBench data is not included. Its attribution and terms are provided by:
+https://zenodo.org/records/7708362
+https://eupp-benchmark.github.io/
+
+No full-data experiment result is included or claimed. Synthetic validation
+artifacts only check implementation wiring and numerical behavior.

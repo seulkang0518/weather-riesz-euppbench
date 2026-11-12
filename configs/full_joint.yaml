@@ -1,0 +1,30 @@
+# Second-stage 122-station x two-variable, all-lead adaptation.
+# Audit the temperature pilot first. This is much more expensive.
+epochs: 80
+microbatch_cases: 1
+global_batch_cases: 64
+train_particles: 50
+validation_members: 51
+evaluation_members: 51
+sampling_steps: 16
+member_chunk: 4
+learning_rate: 0.001
+flow_learning_rate: 0.0001
+weight_decay: 0.0
+max_grad_norm: 1.0
+energy_estimator: empirical
+temperatures: [102.4, 25.6, 10.24]
+sigma_min: 0.00001
+validation_seed: 20261112
+evaluation_seed: 20261113
+workers: 0
+cpu_threads: 2
+bf16: true
+log_every: 20
+model:
+  width: 1024
+  depth: 4
+  heads: 4
+  dropout: 0.1
+  activation_checkpointing: true
+

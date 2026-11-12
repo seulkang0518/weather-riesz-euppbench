@@ -1,0 +1,63 @@
+{
+  "paper": "https://arxiv.org/abs/2504.03463",
+  "paper_version": "v2",
+  "inspected_source_repository": "https://github.com/davidlandry93/sidown",
+  "inspected_revision": "5396f9f5ecb673394b532c80a3e4922d842d1c78",
+  "upstream_source_vendored": false,
+  "inspected_files_sha256": {
+    "src/sidown/dataprep/eupp/raw.py": "373335ea8e98b6edc771b5adef2ddd128de045a2105839169a5d9f87b9919a0c",
+    "src/sidown/dataprep/eupp/dataset.py": "eb403c8d11c33a0e187dae4d20faa54e1c311da0f3d6e34c826032a6c9142461",
+    "src/sidown/dataprep/eupp/torchdataset.py": "feb9c8a56f7643d06d51e36848e9992850b872bab705303fa3f451dee6c1e01f",
+    "src/sidown/dataprep/eupp/mldataset.py": "110517b51748a97e48c1c733fda36dc10efbb444082adcfc0cc187af1d062d4a",
+    "src/sidown/dataprep/eupp/climatology.py": "f8a4d80d65c03e10f9ff227ef870f7c9471f64656344cfad96794248f3246fb7",
+    "src/sidown/dataprep/base.py": "10664dd4df08699f1f7ad35dbb0726e1c5236256800abb694b6d0bb63c927c52",
+    "src/sidown/training/model/transformer.py": "82a85d969444892a9a43ccdb753e6976c6e0e86b800e948787e7f2e9efbcd5d9",
+    "src/sidown/training/batch2xs.py": "fe5012fed1ca946b4c3d2bde4a402c8c68a2a9c4c29ee3c5da7cd85b168263d9",
+    "src/sidown/training/loss.py": "66c5a4404cc4bd44c314ac940cdc7ad76a74eccc0513e00c0c61021d6f1399f3",
+    "src/sidown/stochasticinterpolant/interpfn.py": "fa5c487f10a17c8a75bf4a7408c8e3101b1d414e0376d55871553db7c88e74a9",
+    "src/sidown/stochasticinterpolant/lossfn.py": "8db9b1c79a7032600c9b2556372ebffae4c4f483febf91f82e7fc07eaf78de3d",
+    "src/sidown/stochasticinterpolant/solver.py": "191b2926cd011c61ec92730bf63eb5e11f01b7fc8281fa8a44073a8cfab47725",
+    "src/sidown/evaluation/modelmetrics.py": "a5b3b75b12860475557cee657df7a15576b6fe8d7d642a9ed09d40616044eb2a",
+    "src/sidown/training/config/ex/eupp_fm.yaml": "921f96e94841810dbf044386ef4fac38b776076e9f5606cdefba1595b5e2f7dd",
+    "src/sidown/training/config/ex/batch2xs/ensmean.yaml": "4d54e44e33958e8b9903cb1a77afbcad46627489d1e602bdfa148e78b60aa387"
+  },
+  "riesz_source_repository": "https://github.com/seulkang0518/weather-riesz",
+  "riesz_source_commit": "1c60e06",
+  "riesz_files_unmodified": {
+    "riesz_topk_softmax.py": "a64f0a97e8ae4998cec7e72b8fff7bae27563467c1a4f75acb6d2307455dd578",
+    "uniform_riesz.py": "6651aa6e59dd72d9e954804c95c55a71371fc1d2834b5e2b6be54269c95b3666"
+  },
+  "data": {
+    "record": "https://zenodo.org/records/7708362",
+    "archive_bytes": 18324361137,
+    "archive_md5": "e409457279b3494d18f2dfb41f3f449b",
+    "full_archive_downloaded_locally": false
+  },
+  "implementation_files_sha256": {
+    "configs/full_joint.yaml": "eb0cd9fcc8ac9d660ddf1b62fb0aed32087bd3219f3ae9f4b9db69a9329ccfc5",
+    "configs/smoke.yaml": "8259eee2ceb112d5d9209175844c97dcb9c8ab2df36ccd531a33ec588a0846ad",
+    "configs/temperature48.yaml": "2ec819f4cf98ecc9954d09117f672d66a64460a4a4c0a632633fd20fe3165c80",
+    "download_data.py": "cf651f501d8f3d18504059ec5a934273f89895e18d718b4aef94dd83d0134a17",
+    "eupp_weather/__init__.py": "5f4ff95696e26aaf7582ef8f3e51e7a2880796da7bb05c8dbc2a1f9240752ba5",
+    "eupp_weather/common.py": "080619e4b3df89cd03b578524adbf9ebd74ea38cf8024a5b0b9dcf7183781bab",
+    "eupp_weather/data.py": "a294dd2620c80cef2785eb3ff18dee9b5fb48c216e7f996fa68d03ca852ab63e",
+    "eupp_weather/metrics.py": "1c1f55565ce57de6f414e29ae50f3babdc3444aaea703e43152dd60a1881eec2",
+    "eupp_weather/model.py": "e6c98b9b3369d99b48f3ff13dca69c3b9dc821c1ff56afd59b7b009250ca1740",
+    "eupp_weather/objectives.py": "e79dc2d71b670509bd5cbfe33d40c45fc75415cd043242510e54f5c0fa60b21d",
+    "eupp_weather/preprocessing.py": "671061a32e784c7af7ba65a6b929290fdf1cd06d8e354f1eeae3dbb9a5f944b4",
+    "eupp_weather/riesz_topk_softmax.py": "a64f0a97e8ae4998cec7e72b8fff7bae27563467c1a4f75acb6d2307455dd578",
+    "eupp_weather/uniform_riesz.py": "6651aa6e59dd72d9e954804c95c55a71371fc1d2834b5e2b6be54269c95b3666",
+    "evaluate.py": "66371bbebc8c59f23212bd165f1a184f824b14c1164a8cbb4680c9560641ff52",
+    "make_synthetic.py": "b57de2cf97a5fe7a6ed3577ae47e22e69a6566e7e4d5dad56b4656271f26bffc",
+    "prepare_data.py": "c96ed5aa6bd2f52c92e444919cd8b4e39751523f5979d83dde7b19d7db9a49f6",
+    "run_comparison.py": "448b2f7eb840e8b5298c5d7eace1985a7ccab8235f4fba4d2590e2d204830c7d",
+    "scripts/check_raw_preparation.py": "99bc02c2fde904c515d4ea77f3eba91e724cbe95ce1c13be7dce6f0e67098bec",
+    "scripts/scafell.sh": "03e44eb85bef7a952a9160dc7435d299eda42c90d863460589221d3ebf3d6c6c",
+    "scripts/smoke_cpu.sh": "8a393ec176c8a9d16b95195a32b126e85c821323cf7d484ae110fa3c169348bb",
+    "scripts/ucl_sge.sh": "583800dece225f839547006ffc6a34d9ed13881c6b83f38e2048000a1035c7f1",
+    "tests/test_model_metrics.py": "58cb26413818d8fd964f1b6505bd1135bcb75103607933be7123516581e3df2a",
+    "tests/test_objectives.py": "aefe74709e50ab86e35b30b6b0edd7591f90048fee76813ca16210eaa6947f87",
+    "tests/test_preprocessing.py": "89b0b86caee4a2aaef1ec5f7b39c379e69b451e0b7f3c888454720b091f711f1",
+    "train.py": "7fc5d6c26069673f780361f67cc1fbf2e32782d56c73d2e9fd9e0ad70ef77520"
+  }
+}

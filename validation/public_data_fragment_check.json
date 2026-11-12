@@ -1,0 +1,70 @@
+{
+  "full_archive_downloaded": false,
+  "scope": "One real German station temperature chunk plus coordinate metadata from three public Zarr stores; not a training result",
+  "approximate_bytes_read": 82455124,
+  "stores": [
+    {
+      "store": "stations_ensemble_reforecasts_surface_germany.zarr",
+      "dimensions": {
+        "station_id": 51,
+        "number": 11,
+        "step": 21,
+        "time": 4180
+      },
+      "years": [
+        1997,
+        2016
+      ],
+      "first_station_id": 460,
+      "finite_first_station_values": 45980,
+      "temperature_min_kelvin": 256.78680419921875,
+      "temperature_max_kelvin": 298.995849609375,
+      "initialization_split_counts": {
+        "train": 3553,
+        "val": 627
+      }
+    },
+    {
+      "store": "stations_ensemble_forecasts_surface_germany.zarr",
+      "dimensions": {
+        "station_id": 51,
+        "number": 51,
+        "time": 730,
+        "step": 21
+      },
+      "years": [
+        2017,
+        2018
+      ],
+      "first_station_id": 460,
+      "finite_first_station_values": 37230,
+      "temperature_min_kelvin": 261.0125732421875,
+      "temperature_max_kelvin": 301.078369140625
+    },
+    {
+      "store": "stations_reforecasts_observations_surface_germany.zarr",
+      "dimensions": {
+        "station_id": 51,
+        "step": 21,
+        "time": 4180
+      },
+      "years": [
+        1997,
+        2016
+      ],
+      "first_station_id": 460,
+      "finite_first_station_values": 4159,
+      "temperature_min_kelvin": 257.75,
+      "temperature_max_kelvin": 301.04999999999995,
+      "initialization_split_counts": {
+        "train": 3553,
+        "val": 627
+      }
+    }
+  ],
+  "real_first_station_training_only_statistics": {
+    "finite_target_values": 4159,
+    "residual_scale_at_48h": 0.4547441005706787,
+    "normalization_verified": true
+  }
+}

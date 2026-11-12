@@ -1,0 +1,33 @@
+# Development benchmark: 122 stations, temperature, 48-hour lead, one trained model per seed.
+# Four objective arms share this backbone. No claim of paper-table replication.
+epochs: 50
+microbatch_cases: 2
+global_batch_cases: 64
+train_particles: 8
+validation_members: 51
+evaluation_members: 51
+sampling_steps: 16
+member_chunk: 8
+learning_rate: 0.0005
+flow_learning_rate: 0.0001
+weight_decay: 0.0
+max_grad_norm: 1.0
+# Match our previous conditional energy baseline's U-statistic convention.
+# The authors' released ES baseline instead uses the empirical M^2 denominator.
+energy_estimator: unbiased
+# Untuned on EUPPBench. Three nearly uniform temperature fields as a fixed starting recipe.
+temperatures: [102.4, 25.6, 10.24]
+sigma_min: 0.00001
+validation_seed: 20261112
+evaluation_seed: 20261113
+workers: 0
+cpu_threads: 2
+bf16: true
+log_every: 10
+model:
+  width: 256
+  depth: 4
+  heads: 4
+  dropout: 0.1
+  activation_checkpointing: true
+

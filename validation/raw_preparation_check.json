@@ -1,0 +1,17 @@
+{
+  "development_only": true,
+  "data": "synthetic raw Zarr stores shaped like the public archive; not real EUPPBench forecasts",
+  "countries": 5,
+  "stations": 10,
+  "reforecast_years": [
+    1997,
+    2016
+  ],
+  "counts": {
+    "train": 204,
+    "val": 36,
+    "test": 3
+  },
+  "immutable_prepared_files": 26,
+  "normalization_training_only": true
+}
